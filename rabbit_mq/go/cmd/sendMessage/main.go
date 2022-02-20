@@ -29,7 +29,7 @@ func main() {
 	defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"rmq_test",
+		"golang-queue",
 		false,
 		false,
 		false,

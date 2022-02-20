@@ -1,4 +1,4 @@
-module github.com/DevonMorris/sys_design_playground/rabbit_mq
+module github.com/DevonMorris/sys_design_playground/rabbit_mq/go
 
 go 1.17
 

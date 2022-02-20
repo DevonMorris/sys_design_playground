@@ -1,0 +1,40 @@
+version: "2"
+
+services:
+  # This is needed because I think kafka responds with hostname and the docker
+  # container has a different hostname than localhost
+  docker_dns:
+    image: defreitas/dns-proxy-server
+    restart: unless-stopped
+    ports:
+      - "5380:5380"
+    hostname: "dns.mageddo"
+    volumes:
+      - /etc/resolv.conf:/etc/resolv.conf
+      - /var/run/docker.sock:/var/run/docker.sock
+  zookeeper:
+    image: docker.io/bitnami/zookeeper:3.7
+    hostname: "zookeeper"
+    ports:
+      - "2181:2181"
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - kafka_net
+    tmpfs: "/datalog"
+  kafka:
+    image: docker.io/bitnami/kafka:3
+    hostname: "kafka"
+    ports:
+      - "9092:9092"
+    environment:
+      - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+      - ALLOW_PLAINTEXT_LISTENER=yes
+    depends_on:
+      - zookeeper
+    networks:
+      - kafka_net
+
+networks:
+  kafka_net:
+    driver: bridge
