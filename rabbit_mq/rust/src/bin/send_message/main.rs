@@ -19,7 +19,7 @@ fn main() -> Result<(),Box<dyn Error>> {
     let mut buffer = String::new();
     io::stdin().read_line(&mut buffer)?;
 
-    // Publish a message to the "hello" queue.
+    // Publish a message to the "rmq_test" queue.
     exchange.publish(Publish::new(buffer.as_bytes(), "rmq_test"))?;
 
     Ok(connection.close()?)
